@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>API Github<</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+  
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+    $(document).ready(function(){
+        $(".table").hide();
+        $("#fotogit").hide();
+        $("#alertaOK").hide();
+        $("#alertaER").hide();
+
+
+        $("#buttonS").click(function(){
+            $('#body').empty();
+            $(".icono").show();
+            $.ajax({
+                type: 'GET',
+                url: 'https://api.github.com/users/'+$("#userName").val()+'/repos',
+                data: { get_param: 'value' },
+                dataType: 'json',
+                success: function (json) {
+                    var count=0;
+                    $.each(json, function(index, element){
+                        $('#body').append('<tr><td>'+element.name+'</td><td>'+element.description+'</td><td>'+element.stargazers_count+'</td></tr>');
+                        count++;
+                        $("#alertaOK").show();
+                        });
+                    if(count>0){
+                        $("#text1").text("Repositories " +$("#userName").val());
+                        $(".table").show(1000);}
+                    else{
+                        $("#fotogit").hide();
+                        $(".table").hide();
+                        $("#alertaER").show();
+                    }
+                },
+                error : function(xhr, status) {
+                    $("#fotogit").hide();
+                    $(".table").hide();
+                    $("#alertaER").show();
+
+                }
+            });
+
+        });
+    });
+</script>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-bottom">
+  <a class="navbar-brand" href="#">   
+    <div class="icono">
+    <div class="media-left">
+      <img src="https://eetac.upc.edu/ca/noticies/eetac.png" class="media-object" style="width:230px">
+    </div>
+        <div class="media-body">
+      <h3>   DISSENY DE SERVEIS I APLICACIONS</h3>
+    </div>
+  </a>
+
+  </div>
+</nav>
+
+
+
+<nav class="navbar bg-dark">
+  <ul class="navbar-nav">
+    <a class="navbar-brand text-white" href="#"><h1>GitHub API DSA</h1><br> <h3>Implementation of a simple website with Bootstrap and JQuery</h3></a>
+<br><br><br><br><br>
+
+<!-- Button to Open the Modal -->
+      <button type="button" class="btn btn-light" data-toggle="modal" data-target="#myModal">  Rquisites of the task </button>
+      <!-- The Modal -->
+        <div class="modal" id="myModal">
+        <div class="modal-dialog">
+        <div class="modal-content">
+      <!-- Modal Header -->
+        <div class="modal-header">
+        <h3 class="modal-title">Requisites of the task</h4>
+        <button type="button" id="btnR" class="close" data-dismiss="modal">×</button>
+        </div>
+      <!-- Modal body -->
+        <div class="modal-body">
+         <p>- Asks for a github username </br></br>
+          - Show a table with the repositories of the selected user with (at least): name, description, number of followers </br></br>
+          - The design is not really important but should use bootstrap components </br></br>
+          - The input box for the username can be in the same page or can be two pages: one for asking the name and other for showing the repositories </br></br>
+          - The website must be stored in a github repository! The result of this task, to be sent to Atenea, is a text file with the URL of your repository</br></br>
+        </div>
+      </div>
+      </div>
+      </div>
+  </ul>
+</nav>
+<br>
+
+
+<div class="container-fluid">
+<h3>Enter a github username:</h3>
+    <div class="row">
+        <div class="col-sm-4"><input type="text" class="form-control" id="userName" placeholder="Username"></div>
+        <div class="col-sm-4"><button type="button" id ="buttonS" class="btn btn-primary">Show Repositories</button></div>
+    </div>
+  <br><br>
+   
+  <div class="icono" id="fotogit">
+    <div class="media-left">
+      <img src="https://midu.dev/images/tags/github.png" class="media-object" style="width:40px">
+    </div>
+    <div class="media-body">
+      <h2 id="text1"></h2>
+    </div>
+  </div>
+  <br>
+
+  <!--Alertas -->
+  <div class="alert alert-success fade-in" id="alertaOK">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <h4 strong>Success!</h4 strong> 
+  </div>
+
+  <div class="alert alert-warning fade-in" id="alertaER">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <h4 strong>Error!</h4 strong> This user does not exist
+  </div>
+
+  
+  <!--Table -->
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Number of followers</th>
+        </tr>
+        </thead>
+        <tbody id="body">
+        <!--Function -->
+        </tbody>
+    </table>
+
+
+</div>
+
+</body>
+</html>
